@@ -11,9 +11,9 @@ public class AlarmController implements IAlarmController {
 	IFloorPanel floorPanel = null;
 
 	@Override
-	public void processRequest(AlarmCommand alarmCmd) {
+	public void processRequest(AlarmCommand alarmCmd, Integer ID) {
 	
-		car.getCarController().getFloorPanel().processAlarm(alarmCmd);
+		car.getCarController().getFloorPanel().processAlarm(alarmCmd, ID);
 		car.getUserPanelQueue().setAlarmCmd(alarmCmd);
 		car.getCarController().stopCar();
 	}

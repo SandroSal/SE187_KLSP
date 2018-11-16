@@ -21,8 +21,10 @@ public class AlarmUI extends JPanel {
     final Color[] blinkColors = {Color.RED, null};
     Timer alarmBtnTimer = null;
     
+    int carID = 0;
+    
 	JButton alarmButton = null;
-
+	String buttonType = "";
 	String alarmText = "ALARM";
 	String resetAlarmText = "RESET ALARM";
 	boolean alarmRaised = false;
@@ -30,10 +32,10 @@ public class AlarmUI extends JPanel {
 	IAlarmController alarmController;
 	IAlarmQueue alarmQueue;
 
-	public AlarmUI (IAlarmQueue alarmQ, IAlarmController alarmCtrl) {
+	public AlarmUI (IAlarmQueue alarmQ, IAlarmController alarmCtrl, String type) {
 		alarmQueue = alarmQ;
 		alarmController = alarmCtrl;
-		
+		buttonType = type;
 		alarmButton = new JButton(alarmText);
 		
 		alarmBtnTimer = new Timer(750, new ActionListener() {
@@ -60,11 +62,24 @@ public class AlarmUI extends JPanel {
 		alarmButton.setEnabled(false);
 	}
 	
-    void raiseAlarm( ){
+	void setCarID(int id){
+		carID = id;
+	}
+	
+    void raiseAlarm(int elevatorNumber ){
 		if( alarmLight == "Red non Flashing" ) {
 			alarmButton.setBackground(Color.RED);
 		} else {
 			alarmBtnTimer.start();
+		}
+		
+		if(buttonType.equals("FloorPanelAlarm"))
+		{
+			if(elevatorNumber == 999)
+				alarmButton.setText(alarmText + " in: multiple");
+			else
+				alarmButton.setText(alarmText + " in: " + elevatorNumber);
+
 		}
 		alarmRaised = true;
 	}		
@@ -73,6 +88,12 @@ public class AlarmUI extends JPanel {
 		alarmBtnTimer.stop();
 		alarmButton.setBackground(null);
 		alarmRaised = false;
+		
+		if(buttonType.equals("FloorPanelAlarm"))
+		{
+			alarmButton.setText(alarmText);
+
+		}
 	}
 	
 	boolean isAlarmRaised(){
@@ -82,12 +103,12 @@ public class AlarmUI extends JPanel {
 	void toggleAlarm() {
 		if( alarmButton.getText() == alarmText ) {
 			alarmButton.setText(resetAlarmText);
-			raiseAlarm();
-			alarmQueue.putRequest(AlarmCommand.RAISE);
+			raiseAlarm(0);
+			alarmQueue.putRequest(AlarmCommand.RAISE, this.carID);
 		} else {
 			alarmButton.setText(alarmText);
 			resetAlarm();
-			alarmQueue.putRequest(AlarmCommand.STOP);
+			alarmQueue.putRequest(AlarmCommand.STOP, this.carID);
 		}
 	}
 

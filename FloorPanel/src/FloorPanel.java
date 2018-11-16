@@ -9,6 +9,8 @@ public class FloorPanel implements IFloorPanel
 {
 
 	static List<FloorPanel> lstFloorPanel = new ArrayList<FloorPanel>();
+	static List<Integer> alarmOrder = new ArrayList<Integer>();
+
 	static int alarmCount = 0;
 	
 	private int CurrentFloorNumber;
@@ -135,20 +137,38 @@ public class FloorPanel implements IFloorPanel
 	}
 
 	@Override
-	public void processAlarm(AlarmCommand alarmCommand) {
+	public void processAlarm(AlarmCommand alarmCommand, Integer ID) {
 
+		int display = -1;
+		
 		if( alarmCommand == AlarmCommand.RAISE ) {
 			alarmCount++;
-		} else if ( --alarmCount > 0) {
-			// Another car's alarm is still active
-			return;
+			alarmOrder.add(ID);
+		} else {
+			
+			alarmOrder.remove(ID);
+			
+			if ( --alarmCount > 1) {
+				// Still 2 alarms or more active
+				return;
+			}
 		}
+		
+		if(alarmOrder.size() > 1)
+		{ display = 999;}
+		else if (alarmOrder.size() == 1)
+		{
+			display = alarmOrder.get(0);
+		}
+		
+		
 		Iterator iter = lstFloorPanel.iterator();
 		while( iter.hasNext()) {
-			if( alarmCommand == AlarmCommand.RAISE ) {
+			if( alarmCommand == AlarmCommand.RAISE || alarmOrder.size() == 1) {
 				FloorPanel panel = (FloorPanel)iter.next();
-				panel.getAlarm().getAlarmUI().raiseAlarm();
-			} else {
+				panel.getAlarm().getAlarmUI().raiseAlarm(display);	
+			}
+			else{
 				FloorPanel panel = (FloorPanel)iter.next();
 				panel.getAlarm().getAlarmUI().resetAlarm();
 			}
