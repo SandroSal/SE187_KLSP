@@ -11,8 +11,9 @@ public class Alarm implements IAlarm {
 		alarmController = new AlarmController();
 	}
 	
-	public JPanel createAlarmUI() {
-		alarmUI = new AlarmUI(alarmQueue, alarmController);
+	public JPanel createAlarmUI(String type, int carID) {
+		alarmUI = new AlarmUI(alarmQueue, alarmController, type);
+		alarmUI.setCarID(carID);
 		alarmQueue.setAlarm (this);
 		
 		return alarmUI;

@@ -3,7 +3,8 @@ import java.util.LinkedList;
 public class AlarmQueue implements IAlarmQueue {
 
 	protected LinkedList<AlarmCommand> alarmRequest = new LinkedList<AlarmCommand>();
-
+	protected LinkedList<Integer> alarmCaller = new LinkedList<Integer>();
+	
 	public AlarmQueue() {
 	}
 
@@ -15,8 +16,9 @@ public class AlarmQueue implements IAlarmQueue {
 	}
 	
 	@Override
-	public void putRequest(AlarmCommand alarmCmd) {
+	public void putRequest(AlarmCommand alarmCmd, int ID) {
 		alarmRequest.offer(alarmCmd);
+		alarmCaller.offer(ID);
 	}
 
 	class AlarmMonitorThread implements Runnable {
@@ -32,7 +34,7 @@ public class AlarmQueue implements IAlarmQueue {
 			while(true) {
 				try {
 					if( alarmRequest.size() != 0) {
-						alarm.getAlarmController().processRequest(alarmRequest.pop());
+						alarm.getAlarmController().processRequest(alarmRequest.pop(), alarmCaller.pop());
 					}
 
 					Thread.sleep(1000);
