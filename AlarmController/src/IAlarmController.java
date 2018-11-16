@@ -7,6 +7,6 @@ public interface IAlarmController {
 		
 	void setFloorPanel(IFloorPanel floorPanel);
 		
-	public void processRequest(AlarmCommand alarmCmd);
+	public void processRequest(AlarmCommand alarmCmd, Integer ID);
 	
 }
