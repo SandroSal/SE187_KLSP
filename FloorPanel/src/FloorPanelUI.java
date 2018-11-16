@@ -42,9 +42,9 @@ public class FloorPanelUI extends JPanel {
 		//
 		//new add
 		textCarID = new JTextField(2);
-		textCarID.setText("0");
+		textCarID.setText("-");
 		textCarType = new JTextField(7);
-		textCarType.setText("#####");
+		textCarType.setText("-");
 		add(carIDLabel);
 		add(textCarID);
 		add(carTypeLabel);
@@ -69,7 +69,8 @@ public class FloorPanelUI extends JPanel {
 		add(DownButton, gbc);
 		gbc.gridy = 3;
 		gbc.gridx = 0;
-		add(alarm.createAlarmUI(), gbc);
+		String type = "FloorPanelAlarm";
+		add(alarm.createAlarmUI(type, 0), gbc);
 		alarm.getAlarmUI().disableAlarmButton();
 	}
 	
@@ -150,9 +151,9 @@ public class FloorPanelUI extends JPanel {
 	
 	public void setCarDefault(){
 		textCarID.setBackground(Color.white);
-		textCarID.setText(new Integer(0).toString());
+		textCarID.setText("-");
 		textCarType.setBackground(Color.white);
-		textCarType.setText("######");
+		textCarType.setText("-");
 	}
 	//************************************//
 }

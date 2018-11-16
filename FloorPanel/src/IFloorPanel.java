@@ -33,7 +33,7 @@ public interface IFloorPanel
 	
 	void seDownText(String text);
 
-	void processAlarm(AlarmCommand alarmCommand);
+	void processAlarm(AlarmCommand alarmCommand, Integer ID);
 
     void processedRequest(int floorNumber);
     
