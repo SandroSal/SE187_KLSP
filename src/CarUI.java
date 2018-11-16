@@ -111,7 +111,8 @@ public class CarUI extends JPanel {
 	    gbc.gridy = centerRow++;
 	    gbc.gridx = 0;
 	    if(alarm != null) {
-			add(alarm.createAlarmUI(), gbc);
+			String type = "CarPanelAlarm";
+			add(alarm.createAlarmUI(type, carID), gbc);
 	    }
 
 
